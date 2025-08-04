@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cake Birthday Mas'un</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #cceeff;
+        font-family: "Comic Sans MS", cursive;
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .title {
+        margin-bottom: 20px;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #5c4033;
+        text-align: center;
+        z-index: 10;
+      }
+
+      .cake {
+        position: relative;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        z-index: 9;
+        transform: scale(2);
+      }
+
+      .layer {
+        position: relative;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        box-shadow: inset 0 5px rgba(255, 255, 255, 0.2), 0 5px #4e342e;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.5s ease;
+        z-index: 1;
+      }
+
+      .layer.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .layer1 {
+        width: 120px;
+        height: 48px;
+        background: #8d6e63;
+      }
+      .layer2 {
+        width: 190px;
+        height: 60px;
+        background: #a1887f;
+      }
+      .layer3 {
+        width: 260px;
+        height: 72px;
+        background: #bcaaa4;
+      }
+
+      .cream {
+        position: absolute;
+        width: 100%;
+        height: 16px;
+        top: -12px;
+        background: #fff;
+        border-radius: 50% 50% 0 0;
+      }
+
+      .cherry {
+        width: 14px;
+        height: 14px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+        top: -22px;
+        box-shadow: 0 0 3px #900;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+      }
+
+      .cherry.show {
+        opacity: 1;
+      }
+
+      .candle {
+        width: 6px;
+        height: 25px;
+        background: white;
+        position: absolute;
+        top: -34px;
+        border-radius: 2px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .candle.show {
+        opacity: 1;
+      }
+
+      .flame {
+        width: 10px;
+        height: 10px;
+        background: gold;
+        border-radius: 50%;
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: flicker 0.2s infinite alternate;
+        box-shadow: 0 0 8px orange;
+      }
+
+      @keyframes flicker {
+        0% {
+          transform: translateX(-50%) scale(1);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateX(-50%) scale(1.3);
+          opacity: 1;
+        }
+      }
+
+      .smoke {
+        width: 10px;
+        height: 10px;
+        background: rgba(200, 200, 200, 0.7);
+        border-radius: 50%;
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: smokeRise 1s forwards ease-out;
+      }
+
+      @keyframes smokeRise {
+        0% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(-30px);
+        }
+      }
+
+      button {
+        position: absolute;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 18px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 8px;
+        background: #ff8080;
+        color: white;
+        cursor: pointer;
+        z-index: 20;
+      }
+
+      button:hover {
+        background: #e06666;
+      }
+
+      .nav-button {
+        margin-top: 8px;
+        padding: 6px 16px;
+        background-color: #ffcc00;
+        color: #5c4033;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-decoration: none;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .nav-button:hover {
+        background-color: #f1b700;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cake">
+      <div class="title">Happy Birthday Masonnn</div>
+      <div style="margin-bottom: 12px">
+        <a href="ucapan.html" class="nav-button">Something for u (Click this button)</a>
+      </div>
+
+      <div class="layer layer3" id="layer3"><div class="cream"></div></div>
+      <div class="layer layer2" id="layer2"><div class="cream"></div></div>
+      <div class="layer layer1" id="layer1"><div class="cream"></div></div>
+
+      <button id="tiupBtn" disabled>Tekan Untuk Tiup Lilin</button>
+    </div>
+
+    <script>
+      const layers = [document.getElementById("layer3"), document.getElementById("layer2"), document.getElementById("layer1")];
+      const tiupBtn = document.getElementById("tiupBtn");
+
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function decorateCake() {
+        for (let i = 0; i < layers.length; i++) {
+          const layer = layers[i];
+          layer.classList.add("show");
+          await delay(400);
+
+          for (let j = 0; j < 4 + i; j++) {
+            const cherry = document.createElement("div");
+            cherry.className = "cherry";
+            const offset = (layer.offsetWidth - 20) / (4 + i - 1);
+            cherry.style.left = `${10 + j * offset}px`;
+            layer.appendChild(cherry);
+            await delay(100);
+            cherry.classList.add("show");
+          }
+        }
+
+        // Tambah lilin di layer paling atas
+        const topLayer = layers[2];
+        for (let i = 0; i < 3; i++) {
+          const candle = document.createElement("div");
+          candle.className = "candle";
+          candle.style.left = `${30 + i * 20}px`;
+          topLayer.appendChild(candle);
+          await delay(300);
+          candle.classList.add("show");
+
+          const flame = document.createElement("div");
+          flame.className = "flame";
+          candle.appendChild(flame);
+        }
+
+        tiupBtn.disabled = false; // aktifkan tombol setelah lilin muncul
+      }
+
+      function tiupLilin() {
+        const flames = document.querySelectorAll(".flame");
+        flames.forEach((flame) => {
+          const smoke = document.createElement("div");
+          smoke.className = "smoke";
+          flame.parentElement.appendChild(smoke);
+          flame.remove();
+        });
+
+        tiupBtn.disabled = true; // hanya bisa ditekan sekali
+        tiupBtn.textContent = "Yeaayyyyy 🎉";
+      }
+
+      tiupBtn.addEventListener("click", tiupLilin);
+
+      decorateCake();
+    </script>
+  </body>
+</html>
